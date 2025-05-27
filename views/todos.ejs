@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ToDo List</title>
+  <style>
+    li.completed { text-decoration: line-through; color: gray; }
+  </style>
+</head>
+<body>
+  <h1>ToDo List</h1>
+  <form action="/todos/add" method="POST">
+    <input type="text" name="task" placeholder="Enter task" required>
+    <input type="date" name="dueDate">
+    <button type="submit">Add</button>
+  </form>
+  <ul>
+    <% todos.forEach(todo => { %>
+      <li class="<%= todo.completed ? 'completed' : '' %>">
+        <form action="/todos/toggle/<%= todo._id %>" method="POST" style="display:inline;">
+          <button type="submit"><%= todo.completed ? 'Undo' : 'Complete' %></button>
+        </form>
+        <strong><%= todo.task %></strong> - due <%= todo.dueDate ? todo.dueDate.toDateString() : 'No date' %>
+        <form action="/todos/delete/<%= todo._id %>" method="POST" style="display:inline;">
+          <button type="submit">Delete</button>
+        </form>
+        <form action="/todos/edit/<%= todo._id %>" method="POST" style="display:inline;">
+          <input type="text" name="task" value="<%= todo.task %>" required>
+          <input type="date" name="dueDate" value="<%= todo.dueDate ? todo.dueDate.toISOString().substring(0, 10) : '' %>">
+          <button type="submit">Save</button>
+        </form>
+      </li>
+    <% }) %>
+  </ul>
+</body>
+</html>
