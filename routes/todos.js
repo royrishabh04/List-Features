@@ -18,6 +18,7 @@ router.post('/', async (req, res) => {
 // Edit form
 router.get('/:id/edit', async (req, res) => {
   const todo = await Todo.findById(req.params.id);
+  if (!todo) return res.status(404).send('Todo not found');
   res.render('edit', { todo });
 });
 
@@ -40,21 +41,6 @@ router.delete('/:id', async (req, res) => {
   res.redirect('/todos');
 });
 
-const express = require('express');
-const router = express.Router();
-
-// GET /todos/:id/edit
-router.get('/:id/edit', (req, res) => {
-  const todoId = req.params.id;
-
-  // Simulate fetching a todo item
-  const todo = { id: todoId, title: "Sample Todo", description: "Edit this task" };
-
-  // Render edit form (assuming you're using EJS or another view engine)
-  res.render('edit', { todo });
-});
-
 module.exports = router;
 
-module.exports = router;
 
