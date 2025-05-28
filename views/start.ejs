@@ -2,77 +2,44 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Welcome | Todo App</title>
+  <title>Welcome</title>
   <style>
     body {
       background-color: #121212;
-      color: #ffffff;
-      font-family: 'Segoe UI', sans-serif;
+      color: #fff;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
-      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
     }
-    .container {
-      background-color: #1e1e1e;
-      padding: 40px 50px;
-      border-radius: 15px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-      text-align: center;
-    }
+
     h1 {
-      font-size: 2.5em;
-      margin-bottom: 10px;
-    }
-    p {
-      font-size: 1.2em;
-      color: #aaa;
+      font-size: 3rem;
       margin-bottom: 30px;
     }
-    .buttons {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-    }
-    a.button {
-      text-decoration: none;
-      padding: 12px 24px;
-      border-radius: 8px;
-      font-weight: bold;
-      transition: background 0.3s;
-    }
-    .start {
+
+    a {
+      display: inline-block;
+      margin: 10px;
+      padding: 10px 20px;
       background-color: #4e9af1;
       color: white;
+      text-decoration: none;
+      border-radius: 10px;
+      font-weight: bold;
     }
-    .start:hover {
-      background-color: #2a88ff;
-    }
-    .exit {
-      background-color: #c0392b;
-      color: white;
-    }
-    .exit:hover {
+
+    a.exit {
       background-color: #e74c3c;
-    }
-    footer {
-      margin-top: 30px;
-      color: #888;
-      font-size: 0.9em;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Welcome to Your Todo App</h1>
-    <p>Stay organized. Stay productive.</p>
-    <div class="buttons">
-      <a class="button start" href="/todos">🚀 Use Todo List</a>
-      <a class="button exit" href="/exit">❌ Exit</a>
-    </div>
-    <footer>Created by Rishabh Roy</footer>
-  </div>
+  <h1>Welcome to ToDo List</h1>
+  <a href="/todos">📝 Use ToDo List</a>
+  <a href="/exit" class="exit">❌ Exit</a>
 </body>
 </html>
+

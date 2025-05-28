@@ -1,55 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Edit Task</title>
   <style>
     body {
-      font-family: Inter, sans-serif;
-      background: #1a1b1f;
-      color: white;
+      background-color: #121212;
+      color: #ffffff;
+      font-family: 'Segoe UI', sans-serif;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
-      height: 100vh;
+      padding: 30px;
     }
-    .edit-box {
-      background: #2f313e;
-      padding: 20px 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.4);
-      width: 400px;
-    }
-    input[type="text"], input[type="date"] {
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: 400px;
       width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      background: #3a3c4a;
-      color: white;
-      border: none;
-      border-radius: 5px;
     }
-    button {
-      background: #4e9af1;
+
+    input[type="text"], input[type="date"] {
+      padding: 10px;
+      border-radius: 8px;
       border: none;
+      background-color: #1e1e1e;
       color: white;
-      padding: 10px 15px;
-      border-radius: 5px;
+    }
+
+    button {
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      background-color: #4e9af1;
+      color: white;
+      font-weight: bold;
       cursor: pointer;
     }
+
     button:hover {
-      background: #2a88ff;
+      background-color: #2a88ff;
+    }
+
+    a {
+      color: #aaa;
+      margin-top: 20px;
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: #fff;
     }
   </style>
 </head>
 <body>
-  <div class="edit-box">
-    <h2>Edit Task</h2>
-    <form action="/todos/edit/<%= todo._id %>" method="POST">
-      <input type="text" name="task" value="<%= todo.task %>" required />
-      <input type="date" name="dueDate" value="<%= todo.dueDate ? todo.dueDate.toISOString().split('T')[0] : '' %>" />
-      <button type="submit">Save Changes</button>
-    </form>
-  </div>
+  <h1>Edit Task</h1>
+  <form action="/todos/<%= todo._id %>?_method=PUT" method="POST">
+    <input type="text" name="title" value="<%= todo.title %>" required>
+    <input type="date" name="dueDate" value="<%= todo.dueDate ? todo.dueDate.toISOString().split('T')[0] : '' %>">
+    <button type="submit">Update</button>
+  </form>
+  <a href="/todos">Back to List</a>
 </body>
 </html>
+

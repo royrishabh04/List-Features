@@ -1,127 +1,168 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Todo List</title>
   <style>
     body {
-      font-family: 'Inter', sans-serif;
       background-color: #121212;
-      color: #fff;
+      color: #ffffff;
+      font-family: 'Segoe UI', sans-serif;
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-height: 100vh;
+      padding: 30px;
       margin: 0;
     }
-    .container {
-      background: #1e1e1e;
-      padding: 30px 40px;
-      border-radius: 12px;
-      width: 500px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-      margin-top: 40px;
-      margin-bottom: 20px;
-    }
+
     h1 {
-      text-align: center;
       margin-bottom: 20px;
+      font-size: 2.5rem;
     }
+
     form {
       display: flex;
       gap: 10px;
-      margin-bottom: 20px;
+      margin-bottom: 30px;
     }
+
     input[type="text"], input[type="date"] {
-      flex: 1;
       padding: 10px;
-      background: #2c2c2c;
+      border-radius: 8px;
       border: none;
+      outline: none;
+      width: 250px;
+      background-color: #1e1e1e;
       color: #fff;
-      border-radius: 6px;
     }
+
     button {
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: none;
       background-color: #4e9af1;
       color: white;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 6px;
+      font-weight: bold;
       cursor: pointer;
-      transition: background 0.3s ease;
     }
+
     button:hover {
       background-color: #2a88ff;
     }
+
     ul {
       list-style-type: none;
       padding: 0;
+      width: 100%;
+      max-width: 600px;
     }
+
     li {
-      background-color: #2a2a2a;
+      background-color: #1e1e1e;
       padding: 15px;
-      border-radius: 8px;
       margin-bottom: 10px;
+      border-radius: 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-    .task-text {
-      flex: 1;
+
+    .completed {
+      text-decoration: line-through;
+      color: #888;
     }
-    .due-date {
-      font-size: 0.9em;
-      color: #bbb;
-    }
+
     .actions form {
-      display: inline-block;
-      margin-left: 5px;
+      display: inline;
     }
+
+    .actions button {
+      margin-left: 5px;
+      background-color: #333;
+      color: #fff;
+    }
+
+    .actions button.edit {
+      background-color: #f39c12;
+    }
+
+    .actions button.complete {
+      background-color: #2ecc71;
+    }
+
+    .actions button.delete {
+      background-color: #e74c3c;
+    }
+
     footer {
+      margin-top: 40px;
       text-align: center;
-      color: #aaa;
+      color: #888;
       font-size: 0.9em;
-      margin-bottom: 20px;
+    }
+
+    .exit-button {
+      display: inline-block;
+      margin-top: 10px;
+      background-color: #c0392b;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+
+    .exit-button:hover {
+      background-color: #e74c3c;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>📝 Todo List</h1>
+  <h1>My Todo List</h1>
 
-    <form action="/todos/add" method="POST">
-      <input type="text" name="task" placeholder="New task" required>
-      <input type="date" name="dueDate">
-      <button type="submit">Add</button>
-    </form>
+  <form action="/todos" method="POST">
+    <input type="text" name="title" placeholder="Add a new task" required>
+    <input type="date" name="dueDate">
+    <button type="submit">Add</button>
+  </form>
 
-    <ul>
-      <% todos.forEach(todo => { %>
-        <li>
-          <div class="task-text">
-            <strong style="<%= todo.completed ? 'text-decoration: line-through;' : '' %>"><%= todo.task %></strong><br/>
-            <% if (todo.dueDate) { %>
-              <span class="due-date">Due: <%= new Date(todo.dueDate).toLocaleDateString() %></span>
-            <% } %>
-          </div>
-          <div class="actions">
-            <form action="/todos/toggle/<%= todo._id %>" method="POST">
-              <button type="submit"><%= todo.completed ? 'Undo' : '✓' %></button>
-            </form>
-            <form action="/todos/edit/<%= todo._id %>" method="GET">
-              <button type="submit">✏️</button>
-            </form>
-            <form action="/todos/delete/<%= todo._id %>" method="POST">
-              <button type="submit">🗑️</button>
-            </form>
-          </div>
-        </li>
-      <% }) %>
-    </ul>
-  </div>
+  <ul>
+    <% todos.forEach(todo => { %>
+      <li>
+        <span class="<%= todo.completed ? 'completed' : '' %>">
+          <strong><%= todo.title %></strong>
+          <% if (todo.dueDate) { %>
+            <small>(Due: <%= new Date(todo.dueDate).toLocaleDateString() %>)</small>
+          <% } %>
+        </span>
 
-  <footer>Created by Rishabh Roy</footer>
+        <div class="actions">
+          <% if (!todo.completed) { %>
+            <form action="/todos/<%= todo._id %>/complete" method="POST">
+              <button class="complete">✓</button>
+            </form>
+          <% } %>
+
+          <form action="/todos/<%= todo._id %>/edit" method="GET">
+            <button class="edit">✎</button>
+          </form>
+
+          <form action="/todos/<%= todo._id %>?_method=DELETE" method="POST">
+            <button class="delete">🗑</button>
+          </form>
+        </div>
+      </li>
+    <% }); %>
+  </ul>
+
+  <footer>
+    <p>Created by Rishabh Roy</p>
+    <a href="/exit" class="exit-button">❌ Exit</a>
+  </footer>
 </body>
 </html>
+
 
 
 
