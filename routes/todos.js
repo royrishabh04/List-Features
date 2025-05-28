@@ -40,5 +40,21 @@ router.delete('/:id', async (req, res) => {
   res.redirect('/todos');
 });
 
+const express = require('express');
+const router = express.Router();
+
+// GET /todos/:id/edit
+router.get('/:id/edit', (req, res) => {
+  const todoId = req.params.id;
+
+  // Simulate fetching a todo item
+  const todo = { id: todoId, title: "Sample Todo", description: "Edit this task" };
+
+  // Render edit form (assuming you're using EJS or another view engine)
+  res.render('edit', { todo });
+});
+
+module.exports = router;
+
 module.exports = router;
 
