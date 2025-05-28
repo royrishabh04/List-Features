@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Edit Task</title>
+  <style>
+    body {
+      font-family: Inter, sans-serif;
+      background: #1a1b1f;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .edit-box {
+      background: #2f313e;
+      padding: 20px 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.4);
+      width: 400px;
+    }
+    input[type="text"], input[type="date"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      background: #3a3c4a;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    button {
+      background: #4e9af1;
+      border: none;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #2a88ff;
+    }
+  </style>
+</head>
+<body>
+  <div class="edit-box">
+    <h2>Edit Task</h2>
+    <form action="/todos/edit/<%= todo._id %>" method="POST">
+      <input type="text" name="task" value="<%= todo.task %>" required />
+      <input type="date" name="dueDate" value="<%= todo.dueDate ? todo.dueDate.toISOString().split('T')[0] : '' %>" />
+      <button type="submit">Save Changes</button>
+    </form>
+  </div>
+</body>
+</html>

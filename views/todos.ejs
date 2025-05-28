@@ -3,138 +3,125 @@
 <head>
   <meta charset="UTF-8" />
   <title>Todo List</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg: #1a1b1f;
-      --container: #262730;
-      --text: #f1f1f1;
-      --muted: #888;
-      --primary: #4e9af1;
-      --accent: #2a88ff;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
     body {
       font-family: 'Inter', sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      height: 100vh;
+      background-color: #121212;
+      color: #fff;
       display: flex;
-      justify-content: center;
-      align-items: start;
-      padding-top: 50px;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
     }
-
     .container {
-      background-color: var(--container);
+      background: #1e1e1e;
       padding: 30px 40px;
       border-radius: 12px;
-      width: 100%;
-      max-width: 600px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-    }
-
-    h1 {
+      width: 500px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      margin-top: 40px;
       margin-bottom: 20px;
-      font-size: 26px;
-      text-align: center;
     }
-
-    form.add-task {
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    form {
       display: flex;
       gap: 10px;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
     }
-
     input[type="text"], input[type="date"] {
-      background-color: #333640;
-      border: none;
-      padding: 10px 14px;
-      border-radius: 6px;
-      color: var(--text);
       flex: 1;
+      padding: 10px;
+      background: #2c2c2c;
+      border: none;
+      color: #fff;
+      border-radius: 6px;
     }
-
     button {
-      background-color: var(--primary);
+      background-color: #4e9af1;
       color: white;
       border: none;
-      padding: 10px 16px;
+      padding: 10px 15px;
       border-radius: 6px;
       cursor: pointer;
-      transition: background-color 0.2s ease;
+      transition: background 0.3s ease;
     }
-
     button:hover {
-      background-color: var(--accent);
+      background-color: #2a88ff;
     }
-
     ul {
-      list-style: none;
+      list-style-type: none;
+      padding: 0;
     }
-
-    .task {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background-color: #2f313e;
-      padding: 12px 16px;
-      margin-bottom: 12px;
+    li {
+      background-color: #2a2a2a;
+      padding: 15px;
       border-radius: 8px;
-    }
-
-    .task.completed span {
-      text-decoration: line-through;
-      color: var(--muted);
-    }
-
-    .task .actions {
+      margin-bottom: 10px;
       display: flex;
-      gap: 8px;
+      justify-content: space-between;
+      align-items: center;
     }
-
-    .task form {
-      display: inline;
+    .task-text {
+      flex: 1;
+    }
+    .due-date {
+      font-size: 0.9em;
+      color: #bbb;
+    }
+    .actions form {
+      display: inline-block;
+      margin-left: 5px;
+    }
+    footer {
+      text-align: center;
+      color: #aaa;
+      font-size: 0.9em;
+      margin-bottom: 20px;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>📝 Modern Todo List</h1>
+    <h1>📝 Todo List</h1>
 
-    <form action="/todos/add" method="POST" class="add-task">
-      <input type="text" name="task" placeholder="What do you need to do?" required />
-      <input type="date" name="dueDate" />
+    <form action="/todos/add" method="POST">
+      <input type="text" name="task" placeholder="New task" required>
+      <input type="date" name="dueDate">
       <button type="submit">Add</button>
     </form>
 
     <ul>
       <% todos.forEach(todo => { %>
-        <li class="task <%= todo.completed ? 'completed' : '' %>">
-          <span>
-            <strong><%= todo.task %></strong>
-            <small style="display:block; font-size: 0.8em; color: var(--muted);">
-              <%= todo.dueDate ? todo.dueDate.toDateString() : 'No due date' %>
-            </small>
-          </span>
+        <li>
+          <div class="task-text">
+            <strong style="<%= todo.completed ? 'text-decoration: line-through;' : '' %>"><%= todo.task %></strong><br/>
+            <% if (todo.dueDate) { %>
+              <span class="due-date">Due: <%= new Date(todo.dueDate).toLocaleDateString() %></span>
+            <% } %>
+          </div>
           <div class="actions">
             <form action="/todos/toggle/<%= todo._id %>" method="POST">
-              <button type="submit"><%= todo.completed ? 'Undo' : '✔' %></button>
+              <button type="submit"><%= todo.completed ? 'Undo' : '✓' %></button>
+            </form>
+            <form action="/todos/edit/<%= todo._id %>" method="GET">
+              <button type="submit">✏️</button>
             </form>
             <form action="/todos/delete/<%= todo._id %>" method="POST">
-              <button type="submit">🗑</button>
+              <button type="submit">🗑️</button>
             </form>
           </div>
         </li>
       <% }) %>
     </ul>
   </div>
+
+  <footer>Created by Rishabh Roy</footer>
 </body>
 </html>
+
+
 
