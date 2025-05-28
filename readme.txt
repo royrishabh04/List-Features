@@ -1,6 +1,4 @@
 first run
-npm install express mongoose body-parser ejs
-then
-npm install method-override
+npm install
 and finally
 node app.js

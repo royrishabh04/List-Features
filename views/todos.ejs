@@ -90,6 +90,10 @@
       background-color: #2ecc71;
     }
 
+    .actions button.undo {
+      background-color: #3498db;
+    }
+
     .actions button.delete {
       background-color: #e74c3c;
     }
@@ -117,13 +121,20 @@
       background-color: #e74c3c;
     }
   </style>
+  <script>
+    function confirmDelete(id) {
+      if (confirm('Are you sure you want to delete this task?')) {
+        document.getElementById('delete-form-' + id).submit();
+      }
+    }
+  </script>
 </head>
 <body>
   <h1>My Todo List</h1>
 
   <form action="/todos" method="POST">
     <input type="text" name="title" placeholder="Add a new task" required>
-    <input type="date" name="dueDate">
+    <input type="date" name="dueDate" required>
     <button type="submit">Add</button>
   </form>
 
@@ -131,10 +142,12 @@
     <% todos.forEach(todo => { %>
       <li>
         <span class="<%= todo.completed ? 'completed' : '' %>">
-          <strong><%= todo.title %></strong>
-          <% if (todo.dueDate) { %>
-            <small>(Due: <%= new Date(todo.dueDate).toLocaleDateString() %>)</small>
-          <% } %>
+          <strong>
+            <%= todo.title %>
+            <% if (todo.dueDate) { %> – 
+              <small>Due: <%= new Date(todo.dueDate).toLocaleDateString('en-GB') %></small>
+            <% } %>
+          </strong>
         </span>
 
         <div class="actions">
@@ -142,14 +155,18 @@
             <form action="/todos/<%= todo._id %>/complete" method="POST">
               <button class="complete">✓</button>
             </form>
+          <% } else { %>
+            <form action="/todos/<%= todo._id %>/undo" method="POST">
+              <button class="undo">↺</button>
+            </form>
           <% } %>
 
           <form action="/todos/<%= todo._id %>/edit" method="GET">
             <button class="edit">✎</button>
           </form>
 
-          <form action="/todos/<%= todo._id %>?_method=DELETE" method="POST">
-            <button class="delete">🗑</button>
+          <form id="delete-form-<%= todo._id %>" action="/todos/<%= todo._id %>?_method=DELETE" method="POST">
+            <button type="button" class="delete" onclick="confirmDelete('<%= todo._id %>')">🗑</button>
           </form>
         </div>
       </li>
@@ -162,6 +179,7 @@
   </footer>
 </body>
 </html>
+
 
 
 
