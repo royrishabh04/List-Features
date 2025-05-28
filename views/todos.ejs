@@ -23,7 +23,7 @@
     form {
       display: flex;
       gap: 10px;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
     }
 
     input[type="text"], input[type="date"] {
@@ -34,6 +34,10 @@
       width: 250px;
       background-color: #1e1e1e;
       color: #fff;
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: invert(1); /* make calendar icon white */
     }
 
     button {
@@ -48,6 +52,20 @@
 
     button:hover {
       background-color: #2a88ff;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .tabs button {
+      background-color: #333;
+    }
+
+    .tabs button.active {
+      background-color: #007bff;
     }
 
     ul {
@@ -127,6 +145,13 @@
         document.getElementById('delete-form-' + id).submit();
       }
     }
+
+    function switchTab(tab) {
+      document.getElementById('all-tasks').style.display = tab === 'all' ? 'block' : 'none';
+      document.getElementById('due-tasks').style.display = tab === 'due' ? 'block' : 'none';
+      document.getElementById('tab-all').classList.toggle('active', tab === 'all');
+      document.getElementById('tab-due').classList.toggle('active', tab === 'due');
+    }
   </script>
 </head>
 <body>
@@ -138,7 +163,13 @@
     <button type="submit">Add</button>
   </form>
 
-  <ul>
+  <div class="tabs">
+    <button id="tab-all" class="active" onclick="switchTab('all')">All Tasks</button>
+    <button id="tab-due" onclick="switchTab('due')">Due Date Tasks</button>
+  </div>
+
+  <!-- All Tasks Tab -->
+  <ul id="all-tasks">
     <% todos.forEach(todo => { %>
       <li>
         <div>
@@ -151,7 +182,6 @@
             </div>
           <% } %>
         </div>
-
         <div class="actions">
           <% if (!todo.completed) { %>
             <form action="/todos/<%= todo._id %>/complete" method="POST">
@@ -162,11 +192,42 @@
               <button class="undo">↺</button>
             </form>
           <% } %>
-
           <form action="/todos/<%= todo._id %>/edit" method="GET">
             <button class="edit">✎</button>
           </form>
+          <form id="delete-form-<%= todo._id %>" action="/todos/<%= todo._id %>?_method=DELETE" method="POST">
+            <button type="button" class="delete" onclick="confirmDelete('<%= todo._id %>')">🗑</button>
+          </form>
+        </div>
+      </li>
+    <% }); %>
+  </ul>
 
+  <!-- Due Date Tasks Tab -->
+  <ul id="due-tasks" style="display: none;">
+    <% todos.filter(todo => todo.dueDate).forEach(todo => { %>
+      <li>
+        <div>
+          <span class="<%= todo.completed ? 'completed' : '' %>">
+            <strong><%= todo.title %></strong>
+          </span>
+          <div>
+            <small>Due: <%= new Date(todo.dueDate).toLocaleDateString('en-GB') %></small>
+          </div>
+        </div>
+        <div class="actions">
+          <% if (!todo.completed) { %>
+            <form action="/todos/<%= todo._id %>/complete" method="POST">
+              <button class="complete">✓</button>
+            </form>
+          <% } else { %>
+            <form action="/todos/<%= todo._id %>/undo" method="POST">
+              <button class="undo">↺</button>
+            </form>
+          <% } %>
+          <form action="/todos/<%= todo._id %>/edit" method="GET">
+            <button class="edit">✎</button>
+          </form>
           <form id="delete-form-<%= todo._id %>" action="/todos/<%= todo._id %>?_method=DELETE" method="POST">
             <button type="button" class="delete" onclick="confirmDelete('<%= todo._id %>')">🗑</button>
           </form>
@@ -181,6 +242,7 @@
   </footer>
 </body>
 </html>
+
 
 
 
